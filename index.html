@@ -343,6 +343,41 @@ footer{
     border-radius:15px;
     display:none;
 }
+.ia select,
+.ia button{
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-top:10px;
+
+    font-size:16px;
+
+}
+
+
+.ia button{
+
+    background:#d4af37;
+
+    color:black;
+
+    border:none;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+.ia button:hover{
+
+    transform:scale(1.05);
+
+}
+
 </style>
 
 
@@ -407,19 +442,95 @@ target="_blank">
 
 <div class="ia">
 
-<h2>🤖 Probá tu próximo corte con IA</h2>
+<h2>🤖 Probador IA Fachero's</h2>
 
 <p>
-Subí una foto de tu rostro y pronto nuestra inteligencia artificial te recomendará el corte ideal.
+Subí una foto y probá diferentes estilos antes de cortarte.
 </p>
 
 <br>
 
 <input type="file" id="foto" accept="image/*">
 
-<br>
+
+<br><br>
+
+
+<h3>✂️ Elegí el corte</h3>
+
+<select id="corte">
+
+<option>Fade bajo</option>
+<option>Fade medio</option>
+<option>Fade alto</option>
+<option>Taper Fade</option>
+<option>Mohicano</option>
+<option>Mohí-Taper (mohicano con nuca degradada)</option>
+<option>Mullet moderno</option>
+
+</select>
+
+
+<br><br>
+
+
+<h3>📏 Largo arriba</h3>
+
+<select id="largo">
+
+<option>Muy bajo (máquina #1)</option>
+<option>Bajo (máquina #2)</option>
+<option>Medio (máquina #3 - #4)</option>
+<option>Un dedo de largo</option>
+<option>Dos dedos de largo</option>
+<option>Tres dedos de largo</option>
+<option>Largo (5 cm)</option>
+<option>Largo (8 cm o más)</option>
+
+</select>
+
+
+<br><br>
+
+
+<h3>💈 Textura arriba</h3>
+
+<select id="textura">
+
+<option>Liso peinado</option>
+<option>Texturizado con tijera</option>
+<option>Desmechado</option>
+<option>Con volumen</option>
+<option>Rizos definidos</option>
+
+</select>
+
+
+<br><br>
+
+
+<button id="generar">
+
+✨ Generar mi nuevo look
+
+</button>
+
+
+<br><br>
+
+
+<button id="recomendar">
+
+🧠 Recomendar mi corte ideal
+
+</button>
+
+
+<br><br>
+
 
 <img id="preview">
+
 
 </div>
 
