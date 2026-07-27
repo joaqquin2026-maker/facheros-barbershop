@@ -278,9 +278,10 @@ h2{
     font-size:1.1rem;
 
     line-height:1.6;
-
+    
 
 }
+
 .banner{
 
     text-align:center;
@@ -321,7 +322,27 @@ footer{
 }
 
 
+.ia{
+    background:#111;
+    border:2px solid #d4af37;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(212,175,55,.4);
+}
 
+.ia input{
+    margin-top:20px;
+    color:white;
+}
+
+#preview{
+    margin-top:20px;
+    max-width:300px;
+    width:100%;
+    border-radius:15px;
+    display:none;
+}
 </style>
 
 
@@ -333,6 +354,8 @@ footer{
 
 
 <header>
+
+
 
 
 
@@ -380,7 +403,27 @@ target="_blank">
 
 
 </header>
+<section>
 
+<div class="ia">
+
+<h2>🤖 Probá tu próximo corte con IA</h2>
+
+<p>
+Subí una foto de tu rostro y pronto nuestra inteligencia artificial te recomendará el corte ideal.
+</p>
+
+<br>
+
+<input type="file" id="foto" accept="image/*">
+
+<br>
+
+<img id="preview">
+
+</div>
+
+</section>
 
 
 
@@ -719,7 +762,26 @@ Atención por orden de llegada
 
 
 
+<script>
 
+const foto = document.getElementById("foto");
+const preview = document.getElementById("preview");
+
+foto.addEventListener("change", function(){
+
+const archivo = this.files[0];
+
+if(archivo){
+
+preview.src = URL.createObjectURL(archivo);
+
+preview.style.display = "block";
+
+}
+
+});
+
+</script>
 </body>
 
 </html>
