@@ -2,47 +2,72 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const Replicate = require("replicate");
+const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
 app.use(cors());
 
 app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 app.get("/", (req, res) => {
-  res.send("Servidor de Fachero's funcionando.");
+  res.send("Servidor Gemini funcionando.");
 });
+
 app.post("/generar", async (req, res) => {
   try {
     const { imagen, prompt } = req.body;
 
-    const output = await replicate.run(
-      "black-forest-labs/flux-kontext-pro",
-      {
-        input: {
-          input_image: imagen,
-          prompt: prompt
-        }
-      }
-    );
+    if (!imagen) {
+      return res.status(400).json({
+        error: "No se recibió ninguna imagen.",
+      });
+    }
 
-    res.json({
-      imagen: Array.isArray(output) ? output[0] : output
+    const base64 = imagen.split(",")[1];
+
+    const respuesta = await ai.models.generateContent({
+      model: "gemini-3.1-flash-image",
+      contents: [
+        {
+          text: prompt,
+        },
+        {
+          inlineData: {
+            mimeType: "image/jpeg",
+            data: base64,
+          },
+        },
+      ],
     });
 
-  } catch (error) {
-    console.error(error);
+    for (const part of respuesta.parts) {
+      if (part.inlineData) {
+        return res.json({
+          imagen: `data:$
+          {part.inlineData.mimeType};base64,$ {part.inlineData.data}`,
+        });
+      }
+    }
+
     res.status(500).json({
-      error: "Error al generar la imagen."
+      error: "Gemini no devolvió ninguna imagen.",
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      error: err.message,
     });
   }
 });
+
 app.listen(3000, () => {
   console.log("Servidor iniciado en http://localhost:3000");
 });

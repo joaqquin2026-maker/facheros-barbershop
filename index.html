@@ -894,61 +894,69 @@ Atención por orden de llegada
 
 const foto = document.getElementById("foto");
 const preview = document.getElementById("preview");
-
-foto.addEventListener("change", function(){
-
-const archivo = this.files[0];
-
-if(archivo){
-
-preview.src = URL.createObjectURL(archivo);
-
-preview.style.display = "block";
-
-}
-
-});
 const botonGenerar = document.getElementById("generar");
 const corte = document.getElementById("corte");
 
+foto.addEventListener("change", () => {
+    const archivo = foto.files[0];
+
+    if (archivo) {
+        preview.src = URL.createObjectURL(archivo);
+        preview.style.display = "block";
+    }
+});
+
+
 botonGenerar.addEventListener("click", async () => {
 
-  const archivo = foto.files[0];
+    const archivo = foto.files[0];
 
-  if (!archivo) {
-    alert("Primero seleccioná una foto.");
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = async function () {
-
-    try {
-
-      const respuesta = await fetch("http://localhost:3000/generar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          imagen: reader.result,
-          prompt: `Realizar un ${corte.value} manteniendo el rostro de la persona`
-        })
-      });
-
-      const datos = await respuesta.json();
-
-      document.getElementById("resultado").src = datos.imagen;
-
-    } catch (error) {
-      console.error(error);
-      alert("Error al generar la imagen.");
+    if (!archivo) {
+        alert("Seleccioná una foto.");
+        return;
     }
 
-  };
+    botonGenerar.disabled = true;
+    botonGenerar.textContent = "Generando...";
 
-  reader.readAsDataURL(archivo);
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+
+        try {
+
+            const respuesta = await fetch("http://localhost:3000/generar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    imagen: reader.result,
+                    prompt: `Editar esta fotografía realizando un ${corte.value}. Mantener exactamente el mismo rostro, expresión, iluminación y fondo. Cambiar únicamente el peinado.`
+                })
+            });
+
+            const datos = await respuesta.json();
+
+            if (datos.error) {
+                alert(datos.error);
+                return;
+            }
+
+            preview.src = datos.imagen;
+
+        } catch (e) {
+            console.error(e);
+            alert("Error al generar la imagen.");
+        } finally {
+            botonGenerar.disabled = false;
+            botonGenerar.textContent = "✨ Generar mi nuevo look";
+        }
+
+    };
+
+    reader.readAsDataURL(archivo);
+
 
 });
 </script>

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/joaqquin2026-maker/facheros-barbershop#readme",
   "dependencies": {
+    "@google/genai": "^2.13.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
